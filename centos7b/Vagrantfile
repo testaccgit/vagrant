@@ -1,0 +1,47 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+
+#Instance NAME:
+$INCname="bbocentos7b"
+config.vm.hostname = $INCname
+config.vm.provider "virtualbox" do |v|
+      v.name = $INCname
+      v.memory = 2024
+      v.cpus = 1
+end
+
+#config.vm.provision :shell, path: "bootstrap.sh"
+
+# SET OS
+# centos 7.4
+  config.vm.box = "bento/centos-7.4"
+  
+# SET PUBLIC IP MANUAL
+config.vm.network "public_network", 
+ip: "192.168.1.209",
+bridge: "eth1",
+use_dhcp_assigned_default_route: true
+
+#$script = <<SCRIPT
+#echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCdMxERrPzbCGIETil4fb76rH6V6AtyBBP8VkC+vLg+BG4DjITjReKCpRvQRthzxNtg/uEG588LPyMSrlV3h75Fek61SMQWMDTMT61hJge4zaAoEKaAO2Z4Lxnj3JFMkn4USVARkN35JkjqqU/CAr16g6HoTARUR+YAlTERrXd9N8tIEOmbLAMUa8ZV/OYzhTj8ogtwqDr9GERD4dWiXNM8f/Sqrq0PRVl6cmHjK/BwylthWgCAYe760snaYx2m3CYKoK7BJtj3RBDFRCiYILppZYhi9PaXkd7CvI1gG/xMyUYhSQKEh809Y4G7dZJgDvQjZRBrdf/597Wv3XGGfgQt bbo@bbo-ubuntu" | sudo tee --append /home/vagrant/.ssh/authorized_keys
+
+#echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCdMxERrPzbCGIETil4fb76rH6V6AtyBBP8VkC+vLg+BG4DjITjReKCpRvQRthzxNtg/uEG588LPyMSrlV3h75Fek61SMQWMDTMT61hJge4zaAoEKaAO2Z4Lxnj3JFMkn4USVARkN35JkjqqU/CAr16g6HoTARUR+YAlTERrXd9N8tIEOmbLAMUa8ZV/OYzhTj8ogtwqDr9GERD4dWiXNM8f/Sqrq0PRVl6cmHjK/BwylthWgCAYe760snaYx2m3CYKoK7BJtj3RBDFRCiYILppZYhi9PaXkd7CvI1gG/xMyUYhSQKEh809Y4G7dZJgDvQjZRBrdf/597Wv3XGGfgQt bbo@bbo-ubuntu" | sudo tee --append /root/.ssh/authorized_keys
+#SCRIPT
+
+#### SHELL
+#config.vm.provision "shell", inline: $script
+config.vm.provision "shell", inline: <<-SHELL
+#sudo yum -y install epel-release
+sudo yum -y install gcc-c++ git vim
+#sudo yum groupinstall basic-desktop desktop-platform x11 fonts
+  SHELL
+
+#config.vm.network :forwarded_port, guest: 80, host: 80
+#config.vm.network :forwarded_port, guest: 8080, host: 8080
+#config.vm.network :forwarded_port, guest: 3306, host: 3306
+
+config.ssh.forward_agent = true
+
+end
